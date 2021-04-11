@@ -7,10 +7,11 @@ import { AuthController } from './auth.controller';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
+import { PuppetTeamModule } from 'src/puppetryTeam/PuppetTeam.module';
 
 @Module({
   imports:[
-    ContractorsModule,
+    PuppetTeamModule,
     PassportModule,
     JwtModule.register({
       secret: jwtConstants.secret,
