@@ -28,5 +28,9 @@ export const PuppetTeamSchema = new mongoose.Schema({
     typeOfPerformance: {
         type: String,
         required: true
+    },
+    shows: {
+        type: [],
+        required: false
     }
 });

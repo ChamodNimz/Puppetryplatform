@@ -8,13 +8,14 @@ import { AuthModule } from './auth/auth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { PuppetTeamModule } from './puppetryTeam/PuppetTeam.module';
+import { PublicUserModule } from './publicUsers/publicUser.module';
 
 @Module({
   imports: [
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'client'),
     }),
-    ContractorsModule,
+    PublicUserModule,
     AuthModule,
     MongooseModule.forRoot(keys.mongoURL),
     PuppetTeamModule

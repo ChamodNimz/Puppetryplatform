@@ -9,4 +9,6 @@ export interface PuppetTeam extends Document {
   readonly password: string;
   readonly teamMemberCount: number;
   readonly typeOfPerformance: string;
+  shows: [any];
+  
 }
