@@ -13,6 +13,8 @@ export class ScheduleShowDto {
   @ApiProperty()
   readonly venue: string;
   @ApiProperty()
+  readonly showDescription: string;
+  @ApiProperty()
   readonly ticketPrice: number;
   @ApiProperty()
   readonly typeOfPerformance: string;

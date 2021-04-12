@@ -1,22 +1,35 @@
 import { Injectable } from '@nestjs/common';
-import { ContractorsService } from 'src/contractors/contractors.service';
 import * as bcrypt from 'bcrypt'
 import { JwtService } from '@nestjs/jwt';
 import { PuppetTeamService } from 'src/puppetryTeam/PuppetTeam.service';
+import { PublicUserService } from 'src/publicUsers/publicUser.service';
 
 @Injectable()
 export class AuthService {
 
-  constructor(private PuppetTeamService: PuppetTeamService, private jwtService: JwtService) { }
+  constructor(
+    private puppetTeamService: PuppetTeamService, 
+    private jwtService: JwtService,
+    private publicUserService: PublicUserService,
+
+    ) { }
 
   async validateUser(email: string, password: string): Promise<any> {
 
-    const user = await this.PuppetTeamService.findOneByEmail(email);
+    const user = await this.puppetTeamService.findOneByEmail(email);
     if (user && await bcrypt.compare(password, user.password)) {
 
       const { password, ...result } = user;
       return result;
     }
+
+    const publicUser = await this.publicUserService.findOneByEmail(email);
+    if (publicUser && await bcrypt.compare(password, publicUser.password)) {
+
+      const { password, ...result } = publicUser;
+      return result;
+    }
+    
     return null;
   }
 

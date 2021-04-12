@@ -14,19 +14,19 @@ export class PublicUserController {
     constructor(private readonly publicUserService: PublicUserService) { }
 
     @Post('/create')
-    @ApiCreatedResponse({ description: 'create a profile for a contractor. 0 - not evaluated | 1 - approved | 2 - not approved' })
+    @ApiCreatedResponse({ description: 'create a profile for a public user' })
     @ApiBody({ type: CreatePublicUserDto })
-    async createOne(@Body() createContractorDto: CreatePublicUserDto) {
+    async createOne(@Body() createPublicUserDto: CreatePublicUserDto) {
         
         try {
 
             // hash password
-            const hashedPassword = await bcrypt.hash(createContractorDto.password, 10);
-            createContractorDto.password = hashedPassword;
+            const hashedPassword = await bcrypt.hash(createPublicUserDto.password, 10);
+            createPublicUserDto.password = hashedPassword;
 
             //save
-            createContractorDto.roles = Role.PublicUser;
-            return await this.publicUserService.create(createContractorDto);
+            createPublicUserDto.roles = Role.PublicUser;
+            return await this.publicUserService.create(createPublicUserDto);
 
         } catch (error) {
             if (error.message) { throw new HttpException(error.message, HttpStatus.BAD_REQUEST); }

@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import { PuppetShowSchema } from './Show.schema';
 
 export const PuppetTeamSchema = new mongoose.Schema({
 
@@ -30,7 +31,7 @@ export const PuppetTeamSchema = new mongoose.Schema({
         required: true
     },
     shows: {
-        type: [],
+        type: [PuppetShowSchema],
         required: false
     }
 });

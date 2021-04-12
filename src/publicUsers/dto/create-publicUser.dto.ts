@@ -10,4 +10,8 @@ export class CreatePublicUserDto {
   @ApiProperty()
   password: string;
   roles: Role.PublicUser;
+  @ApiProperty()
+  readonly long: string;
+  @ApiProperty()
+  readonly lat: string;
 }

@@ -23,5 +23,14 @@ export const PublicUserSchema = new mongoose.Schema({
     },
     roles: {
         type: [],
+    },
+    long: {
+        type: String,
+        required: false,
+    },
+    lat: {
+        type: String,
+        required: false,
     }
+
 });
