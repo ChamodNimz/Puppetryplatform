@@ -43,6 +43,6 @@ export class PuppetTeamService {
 
     async update(id, puppetTeam: PuppetTeam) {
 
-        return await this.puppetTeamModel.findOneAndUpdate({ _id: id }, puppetTeam);
+        return await this.puppetTeamModel.findOneAndUpdate({ _id: id }, puppetTeam, {new: true, useFindAndModify: false});
     }
 }

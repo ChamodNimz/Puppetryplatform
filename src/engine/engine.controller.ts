@@ -35,14 +35,14 @@ export class EngineController {
                 createBookingDto.ticketPrice = show.ticketPrice;
 
                 // save 
-               const result = await this.engineService.createBooking(createBookingDto);
-               if(result){
-                   show.seatCount = show.seatCount - 1;
-                   return await this.puppetTeamService.update(createBookingDto.bookedTeam,team);
-               }
+                const result = await this.engineService.createBooking(createBookingDto);
+                if (result) {
+                    show.seatCount = show.seatCount - 1;
+                    return await this.puppetTeamService.update(createBookingDto.bookedTeam, team);
+                }
             }
 
-            return await this.engineService.createBooking(createBookingDto);
+            throw new HttpException('All seats are booked for this show', HttpStatus.BAD_REQUEST)
 
         } catch (error) {
             if (error.message) { throw new HttpException(error.message, HttpStatus.BAD_REQUEST); }

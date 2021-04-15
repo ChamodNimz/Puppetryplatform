@@ -13,11 +13,12 @@ export class PublicUserController {
 
     constructor(private readonly publicUserService: PublicUserService) { }
 
+
     @Post('/create')
     @ApiCreatedResponse({ description: 'create a profile for a public user' })
     @ApiBody({ type: CreatePublicUserDto })
     async createOne(@Body() createPublicUserDto: CreatePublicUserDto) {
-        
+
         try {
 
             // hash password
@@ -45,7 +46,7 @@ export class PublicUserController {
         try {
 
             let result = await this.publicUserService.findOneByEmail(email);
-            if (!result) { throw new HttpException('Contractor is not found', HttpStatus.NOT_FOUND) }
+            if (!result) { throw new HttpException('public user is not found', HttpStatus.NOT_FOUND) }
             return result;
 
         } catch (error) {
@@ -73,6 +74,8 @@ export class PublicUserController {
             }
         }
     }
+
+
 
 }
 
