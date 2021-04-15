@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import validator from 'validator';
 
-export const BookingSchema = new mongoose.Schema({
+export const ShareCount = new mongoose.Schema({
 
     id: {
         type: String,
@@ -14,8 +14,8 @@ export const BookingSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    ticketPrice: {
+    count: {
         type: Number,
-        required: true,
+        required: false,
     }
 });

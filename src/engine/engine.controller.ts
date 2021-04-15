@@ -4,7 +4,9 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Role } from 'src/enums/role.enum';
 import { PuppetTeamService } from 'src/puppetryTeam/PuppetTeam.service';
 import { PuppetTeamSchema } from 'src/puppetryTeam/schemas/PuppetTeam.schema';
+import { CountShareDto } from './dto/count-share.dto';
 import { CreateBookingDto } from './dto/create-booking.dto';
+import { RateShowDto } from './dto/rate-show.dto';
 import { EngineService } from './engine.service';
 
 
@@ -43,6 +45,50 @@ export class EngineController {
             }
 
             throw new HttpException('All seats are booked for this show', HttpStatus.BAD_REQUEST)
+
+        } catch (error) {
+            if (error.message) { throw new HttpException(error.message, HttpStatus.BAD_REQUEST); }
+            else {
+                throw new HttpException('Server error', HttpStatus.INTERNAL_SERVER_ERROR)
+            }
+        }
+    }
+
+    @Post('/rateShow')
+    //@UseGuards(JwtAuthGuard, RolesGuard)
+    //@Roles(Role.Admin)
+    @ApiCreatedResponse({ description: 'rate a puppet show' })
+    @ApiBody({ type: RateShowDto })
+    async rateShow(@Body() rateShowDto: RateShowDto) {
+
+        try {
+
+            return await this.engineService.rateShow(rateShowDto);
+
+        } catch (error) {
+            if (error.message) { throw new HttpException(error.message, HttpStatus.BAD_REQUEST); }
+            else {
+                throw new HttpException('Server error', HttpStatus.INTERNAL_SERVER_ERROR)
+            }
+        }
+    }
+
+    @Post('/countShare')
+    //@UseGuards(JwtAuthGuard, RolesGuard)
+    //@Roles(Role.Admin)
+    @ApiCreatedResponse({ description: 'count share of a show' })
+    @ApiBody({ type: CountShareDto })
+    async countShare(@Body() countShareDto: CountShareDto) {
+
+        try {
+
+            let share = await this.engineService.findShareCount(countShareDto);
+            if (share) {
+                share.count++;
+                return await share.save();
+            }
+            return await this.engineService.createCount(countShareDto);
+
 
         } catch (error) {
             if (error.message) { throw new HttpException(error.message, HttpStatus.BAD_REQUEST); }

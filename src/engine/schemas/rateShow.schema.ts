@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import validator from 'validator';
 
-export const BookingSchema = new mongoose.Schema({
+export const ShowRatingShema = new mongoose.Schema({
 
     id: {
         type: String,
@@ -14,7 +14,7 @@ export const BookingSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    ticketPrice: {
+    rating: {
         type: Number,
         required: true,
     }

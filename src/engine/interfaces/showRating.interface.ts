@@ -1,9 +1,9 @@
 import { Document } from 'mongoose';
 
-export interface Booking extends Document {
+export interface ShowRating extends Document {
 
   id?: string;
   bookedShow: string;
   bookedTeam: string;
-  ticketPrice: number
+  rating: number
 }
