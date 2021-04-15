@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose';
 import validator from 'validator';
 
-export const ShareCountSchema = new mongoose.Schema({
+export const CommentSchema = new mongoose.Schema({
 
     id: {
         type: String,
@@ -14,8 +14,12 @@ export const ShareCountSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    count: {
-        type: Number,
+    publicUserid: {
+        type: String,
+        required: true,
+    },
+    comments: {
+        type: [String],
         required: false,
     }
 });

@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { CommentDto } from './dto/comment.dto';
 import { CountShareDto } from './dto/count-share.dto';
 import { CreateBookingDto } from './dto/create-booking.dto';
 import { RateShowDto } from './dto/rate-show.dto';
 import { Booking } from './interfaces/booking.interface';
+import { Comment } from './interfaces/comment.interfac';
 import { ShareCount } from './interfaces/shareCount.interface';
 import { ShowRating } from './interfaces/showRating.interface';
 
@@ -14,7 +16,8 @@ export class EngineService {
     constructor(
         @InjectModel('Booking') private readonly bookingModel: Model<Booking>,
         @InjectModel('ShowRating') private readonly showRatingModel: Model<ShowRating>,
-        @InjectModel('ShareCount') private readonly shareCountModel: Model<ShareCount>
+        @InjectModel('ShareCount') private readonly shareCountModel: Model<ShareCount>,
+        @InjectModel('Comment') private readonly commentModel: Model<Comment>,
         
         ) { }
 
@@ -33,6 +36,21 @@ export class EngineService {
     async findShareCount(countShareDto: CountShareDto): Promise<ShareCount> {
 
         return await this.shareCountModel.findOne({ bookedTeam: countShareDto.bookedTeam, bookedShow: countShareDto.bookedShow });
+    }
+
+    async findComments(commentDtp: CommentDto): Promise<Comment> {
+
+        return await this.commentModel.findOne({ bookedTeam: commentDtp.bookedTeam, bookedShow: commentDtp.bookedShow });
+    }
+    async findAllComments(): Promise<Comment[]> {
+
+        return await this.commentModel.find();
+    }
+
+    async saveComment(commentDto: CommentDto) {
+
+        const newComment = new this.commentModel(commentDto);
+        return await newComment.save(); 
     }
 
     async createCount(countShareDto: CountShareDto) {

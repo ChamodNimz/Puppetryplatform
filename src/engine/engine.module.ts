@@ -5,7 +5,8 @@ import { EngineController } from './engine.controller';
 import { BookingSchema } from './schemas/booking.schema';
 import { PuppetTeamModule } from 'src/puppetryTeam/PuppetTeam.module';
 import { ShowRatingShema } from './schemas/rateShow.schema';
-import { ShareCount } from './schemas/shareCount.schema';
+import { ShareCountSchema } from './schemas/shareCount.schema';
+import { CommentSchema } from './schemas/comment.schema';
 
 @Module({
   imports: [
@@ -13,7 +14,8 @@ import { ShareCount } from './schemas/shareCount.schema';
     MongooseModule.forFeature([
       { name: 'Booking', schema: BookingSchema },
       { name: 'ShowRating', schema: ShowRatingShema },
-      { name: 'ShareCount', schema: ShareCount },
+      { name: 'ShareCount', schema: ShareCountSchema },
+      { name: 'Comment', schema: CommentSchema },
     ])
   ],
   controllers: [EngineController],
