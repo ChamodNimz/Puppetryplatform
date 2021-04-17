@@ -5,4 +5,5 @@ export interface TeamMetaData {
     disLikes: number;
     ratingCount: number;
     shareCount: number;
+    weight: number;
 }

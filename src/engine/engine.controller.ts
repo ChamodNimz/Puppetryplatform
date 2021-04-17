@@ -180,30 +180,41 @@ export class EngineController {
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
     @Get('/getTeamRanking')
-    async getTeamRanking(): Promise<Comment[]> {
+    async getTeamRanking(): Promise<TeamMetaData[]> {
 
         try {
 
+            let teams = [];
+
             // get ratings
-            let ratings = this.engineService.findAllRatings();
+            let ratings = await this.engineService.findAllRatings();
             // get likes & dislikes
-            let likesDislikes = this.engineService.findAllLikeDislikes();
+            let likesDislikes = await  this.engineService.findAllLikeDislikes();
             // get share count
-            let shares = this.engineService.findAllShareCount();
-            // create team list to analyse
+            let shares = await this.engineService.findAllShareCount();
 
             // create team list to analyse
-            (await ratings).forEach(el => {
-                this.teams.push({ teamId: el.bookedTeam, likes: 0, disLikes: 0, ratingCount: 0, shareCount: 0 });
+            ratings.forEach(el => {
+                teams.push({ teamId: el.bookedTeam, likes: 0, disLikes: 0, ratingCount: el.rating, shareCount: 0, weight: 0 });
             });
 
-            this.teams.forEach(async el => {
-                el.shareCount = (await shares).find(e=> e.bookedTeam == el.teamId).count;
+            teams.forEach( el => {
+                el.shareCount = shares.find(e => e.bookedTeam == el.teamId).count;
             });
 
-            
+            teams.forEach( el => {
+                el.likes = likesDislikes.filter(e => e.bookedTeam == el.teamId && e.liked).length;
+                el.disLikes = likesDislikes.filter(e => e.bookedTeam == el.teamId && e.disliked).length;
+            });
 
-            return null;
+            // assign weight
+            teams.forEach(el => {
+                el.weight = el.likes + el.ratingCount + el.shareCount;
+            });
+
+            console.log(this.teams);
+            // rank
+            return teams.sort((a,b)=> b.weight - a.weight  );
 
         } catch (error) {
             if (error.message) { throw new HttpException(error.message, HttpStatus.BAD_REQUEST); }
