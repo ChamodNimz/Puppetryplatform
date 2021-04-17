@@ -11,10 +11,14 @@ import { LikeDislikeDto } from './dto/likeDislike.dto';
 import { RateShowDto } from './dto/rate-show.dto';
 import { EngineService } from './engine.service';
 import { Comment } from './interfaces/comment.interfac';
+import { TeamMetaData } from './interfaces/helper.interfacs/TeamMetaData.interface';
 
 
 @Controller('engine')
 export class EngineController {
+
+    teamMeta: TeamMetaData = null;
+    teams: TeamMetaData[] = [];
 
     constructor(
         private readonly engineService: EngineService,
@@ -111,7 +115,7 @@ export class EngineController {
         try {
 
             let comments = await this.engineService.findComments(commentDto);
-            if(comments){
+            if (comments) {
                 comments.comments.push(commentDto.comments[0]);
                 return await this.engineService.saveComment(commentDto);
             }
@@ -126,7 +130,7 @@ export class EngineController {
         }
     }
 
-    
+
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
     @Get('/getAllComments')
@@ -155,7 +159,7 @@ export class EngineController {
 
         try {
 
-            
+
             let likeDislikes = await this.engineService.findLikeDislikes(likeDislikeDto);
             if (likeDislikes) {
                 likeDislikes.liked = likeDislikeDto.liked;
@@ -164,6 +168,42 @@ export class EngineController {
             }
             return await this.engineService.saveLikeDislikes(likeDislikeDto);
 
+
+        } catch (error) {
+            if (error.message) { throw new HttpException(error.message, HttpStatus.BAD_REQUEST); }
+            else {
+                throw new HttpException('Server error', HttpStatus.INTERNAL_SERVER_ERROR)
+            }
+        }
+    }
+
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
+    @Get('/getTeamRanking')
+    async getTeamRanking(): Promise<Comment[]> {
+
+        try {
+
+            // get ratings
+            let ratings = this.engineService.findAllRatings();
+            // get likes & dislikes
+            let likesDislikes = this.engineService.findAllLikeDislikes();
+            // get share count
+            let shares = this.engineService.findAllShareCount();
+            // create team list to analyse
+
+            // create team list to analyse
+            (await ratings).forEach(el => {
+                this.teams.push({ teamId: el.bookedTeam, likes: 0, disLikes: 0, ratingCount: 0, shareCount: 0 });
+            });
+
+            this.teams.forEach(async el => {
+                el.shareCount = (await shares).find(e=> e.bookedTeam == el.teamId).count;
+            });
+
+            
+
+            return null;
 
         } catch (error) {
             if (error.message) { throw new HttpException(error.message, HttpStatus.BAD_REQUEST); }

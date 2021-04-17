@@ -73,4 +73,19 @@ export class EngineService {
         const likeDislikes = new this.likeDislikeModel(likeDislikeDto);
         return await likeDislikes.save(); 
     }
+
+    async findAllRatings(): Promise<ShowRating[]> {
+
+        return await this.showRatingModel.find();
+    }
+
+    async findAllLikeDislikes(): Promise<LikeDislike[]> {
+
+        return await this.likeDislikeModel.find();
+    }
+
+    async findAllShareCount(): Promise<ShareCount[]> {
+
+        return await this.shareCountModel.find();
+    }
 }
