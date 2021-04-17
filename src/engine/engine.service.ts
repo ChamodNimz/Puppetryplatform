@@ -4,9 +4,11 @@ import { Model } from 'mongoose';
 import { CommentDto } from './dto/comment.dto';
 import { CountShareDto } from './dto/count-share.dto';
 import { CreateBookingDto } from './dto/create-booking.dto';
+import { LikeDislikeDto } from './dto/likeDislike.dto';
 import { RateShowDto } from './dto/rate-show.dto';
 import { Booking } from './interfaces/booking.interface';
 import { Comment } from './interfaces/comment.interfac';
+import { LikeDislike } from './interfaces/likeDislike.interface';
 import { ShareCount } from './interfaces/shareCount.interface';
 import { ShowRating } from './interfaces/showRating.interface';
 
@@ -18,6 +20,7 @@ export class EngineService {
         @InjectModel('ShowRating') private readonly showRatingModel: Model<ShowRating>,
         @InjectModel('ShareCount') private readonly shareCountModel: Model<ShareCount>,
         @InjectModel('Comment') private readonly commentModel: Model<Comment>,
+        @InjectModel('LikeDislike') private readonly likeDislikeModel: Model<LikeDislike>,
         
         ) { }
 
@@ -38,9 +41,9 @@ export class EngineService {
         return await this.shareCountModel.findOne({ bookedTeam: countShareDto.bookedTeam, bookedShow: countShareDto.bookedShow });
     }
 
-    async findComments(commentDtp: CommentDto): Promise<Comment> {
+    async findComments(commentDto: CommentDto): Promise<Comment> {
 
-        return await this.commentModel.findOne({ bookedTeam: commentDtp.bookedTeam, bookedShow: commentDtp.bookedShow });
+        return await this.commentModel.findOne({ bookedTeam: commentDto.bookedTeam, bookedShow: commentDto.bookedShow });
     }
     async findAllComments(): Promise<Comment[]> {
 
@@ -58,5 +61,16 @@ export class EngineService {
         const newShareCount = new this.shareCountModel(countShareDto);
         newShareCount.count = 1;
         return await newShareCount.save(); 
+    }
+
+    async findLikeDislikes(likeDislikeDto: LikeDislikeDto): Promise<LikeDislike> {
+
+        return await this.likeDislikeModel.findOne({ bookedTeam: likeDislikeDto.bookedTeam, bookedShow: likeDislikeDto.bookedShow, publicUserId: likeDislikeDto.publicUserId  });
+    }
+
+    async saveLikeDislikes(likeDislikeDto: LikeDislikeDto) {
+
+        const likeDislikes = new this.likeDislikeModel(likeDislikeDto);
+        return await likeDislikes.save(); 
     }
 }

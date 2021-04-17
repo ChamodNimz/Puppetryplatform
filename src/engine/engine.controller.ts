@@ -7,6 +7,7 @@ import { PuppetTeamSchema } from 'src/puppetryTeam/schemas/PuppetTeam.schema';
 import { CommentDto } from './dto/comment.dto';
 import { CountShareDto } from './dto/count-share.dto';
 import { CreateBookingDto } from './dto/create-booking.dto';
+import { LikeDislikeDto } from './dto/likeDislike.dto';
 import { RateShowDto } from './dto/rate-show.dto';
 import { EngineService } from './engine.service';
 import { Comment } from './interfaces/comment.interfac';
@@ -136,6 +137,33 @@ export class EngineController {
             let result = await this.engineService.findAllComments();
             if (result.length == 0) { throw new HttpException('No comments are found', HttpStatus.NOT_FOUND) }
             return result;
+
+        } catch (error) {
+            if (error.message) { throw new HttpException(error.message, HttpStatus.BAD_REQUEST); }
+            else {
+                throw new HttpException('Server error', HttpStatus.INTERNAL_SERVER_ERROR)
+            }
+        }
+    }
+
+    @Post('/likeDislike')
+    //@UseGuards(JwtAuthGuard, RolesGuard)
+    //@Roles(Role.Admin)
+    @ApiCreatedResponse({ description: 'give a like or dislike for a show' })
+    @ApiBody({ type: LikeDislikeDto })
+    async likeDislike(@Body() likeDislikeDto: LikeDislikeDto) {
+
+        try {
+
+            
+            let likeDislikes = await this.engineService.findLikeDislikes(likeDislikeDto);
+            if (likeDislikes) {
+                likeDislikes.liked = likeDislikeDto.liked;
+                likeDislikes.disliked = likeDislikeDto.disliked;
+                return await likeDislikes.save();
+            }
+            return await this.engineService.saveLikeDislikes(likeDislikeDto);
+
 
         } catch (error) {
             if (error.message) { throw new HttpException(error.message, HttpStatus.BAD_REQUEST); }

@@ -7,6 +7,7 @@ import { PuppetTeamModule } from 'src/puppetryTeam/PuppetTeam.module';
 import { ShowRatingShema } from './schemas/rateShow.schema';
 import { ShareCountSchema } from './schemas/shareCount.schema';
 import { CommentSchema } from './schemas/comment.schema';
+import { LikeDislikeSchema } from './schemas/likeDislike.schema';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { CommentSchema } from './schemas/comment.schema';
       { name: 'ShowRating', schema: ShowRatingShema },
       { name: 'ShareCount', schema: ShareCountSchema },
       { name: 'Comment', schema: CommentSchema },
+      { name: 'LikeDislike', schema: LikeDislikeSchema },
     ])
   ],
   controllers: [EngineController],
