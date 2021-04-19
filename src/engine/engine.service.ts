@@ -21,8 +21,8 @@ export class EngineService {
         @InjectModel('ShareCount') private readonly shareCountModel: Model<ShareCount>,
         @InjectModel('Comment') private readonly commentModel: Model<Comment>,
         @InjectModel('LikeDislike') private readonly likeDislikeModel: Model<LikeDislike>,
-        
-        ) { }
+
+    ) { }
 
     async createBooking(createBookingDto: CreateBookingDto) {
 
@@ -53,25 +53,25 @@ export class EngineService {
     async saveComment(commentDto: CommentDto) {
 
         const newComment = new this.commentModel(commentDto);
-        return await newComment.save(); 
+        return await newComment.save();
     }
 
     async createCount(countShareDto: CountShareDto) {
 
         const newShareCount = new this.shareCountModel(countShareDto);
         newShareCount.count = 1;
-        return await newShareCount.save(); 
+        return await newShareCount.save();
     }
 
     async findLikeDislikes(likeDislikeDto: LikeDislikeDto): Promise<LikeDislike> {
 
-        return await this.likeDislikeModel.findOne({ bookedTeam: likeDislikeDto.bookedTeam, bookedShow: likeDislikeDto.bookedShow, publicUserId: likeDislikeDto.publicUserId  });
+        return await this.likeDislikeModel.findOne({ bookedTeam: likeDislikeDto.bookedTeam, bookedShow: likeDislikeDto.bookedShow, publicUserId: likeDislikeDto.publicUserId });
     }
 
     async saveLikeDislikes(likeDislikeDto: LikeDislikeDto) {
 
         const likeDislikes = new this.likeDislikeModel(likeDislikeDto);
-        return await likeDislikes.save(); 
+        return await likeDislikes.save();
     }
 
     async findAllRatings(): Promise<ShowRating[]> {
@@ -87,5 +87,13 @@ export class EngineService {
     async findAllShareCount(): Promise<ShareCount[]> {
 
         return await this.shareCountModel.find();
+    }
+
+    async findBookingsFromTo(team: string ,fromDate: string, toDate: string): Promise<Booking[]> {
+
+        return await this.bookingModel.find({
+            bookedTeam: team, 
+            date: { $gte: new Date(fromDate), $lte: new Date(toDate) }
+        });
     }
 }

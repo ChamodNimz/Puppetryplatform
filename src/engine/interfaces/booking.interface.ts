@@ -5,5 +5,6 @@ export interface Booking extends Document {
   id?: string;
   bookedShow: string;
   bookedTeam: string;
+  date: Date;
   ticketPrice: number
 }

@@ -17,5 +17,9 @@ export const BookingSchema = new mongoose.Schema({
     ticketPrice: {
         type: Number,
         required: true,
+    },
+    date: {
+        type: Date,
+        required: true,
     }
 });

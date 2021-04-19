@@ -224,5 +224,30 @@ export class EngineController {
         }
     }
 
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
+    @Get('/getTicketSalesReport/:teamId/:fromDate/:toDate')
+    async getTicketSalesReport(@Param('teamId') teamId: string, @Param('fromDate') fromDate: string, @Param('toDate') toDate: string): Promise<any> {
+
+        try {
+
+            // team name, email, Started since
+            let team = await this.puppetTeamService.findOne(teamId);
+            // Ticket price, No of tickets
+            let bookings = await this.engineService.findBookingsFromTo(teamId, fromDate, toDate);
+            let total = 0;
+            bookings.forEach(el => {
+                total = el.ticketPrice+total;
+            });
+            return {team: team, total: total, ticketCount: bookings.length, showCount: team.shows.length}
+
+        } catch (error) {
+            if (error.message) { throw new HttpException(error.message, HttpStatus.BAD_REQUEST); }
+            else {
+                throw new HttpException('Server error', HttpStatus.INTERNAL_SERVER_ERROR)
+            }
+        }
+    }
+
 }
 

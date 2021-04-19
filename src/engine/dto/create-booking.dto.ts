@@ -8,5 +8,7 @@ export class CreateBookingDto {
   readonly bookedTeam: string;
   @ApiProperty()
   readonly publicUserId: string;
+  @ApiProperty()
+  readonly date: string;
   ticketPrice: number;
 }
