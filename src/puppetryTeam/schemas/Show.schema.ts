@@ -43,6 +43,6 @@ export const PuppetShowSchema = new mongoose.Schema({
     },
     typeOfPerformance: {
         type: String,
-        required: true
+        required: false
     }
 });
