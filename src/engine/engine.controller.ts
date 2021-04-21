@@ -12,6 +12,8 @@ import { RateShowDto } from './dto/rate-show.dto';
 import { EngineService } from './engine.service';
 import { Comment } from './interfaces/comment.interfac';
 import { TeamMetaData } from './interfaces/helper.interfacs/TeamMetaData.interface';
+import { ShareCount } from './interfaces/shareCount.interface';
+import { ShowRating } from './interfaces/showRating.interface';
 
 
 @Controller('engine')
@@ -149,6 +151,66 @@ export class EngineController {
             }
         }
     }
+
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
+    @Get('/getComments/:teamId')
+    async findAllCommmentsOfTeam(@Param('teamId') teamId: string): Promise<Comment[]> {
+
+        try {
+
+            let result = await this.engineService.findAllComments();
+            if (result.length == 0) { throw new HttpException('No comments are found', HttpStatus.NOT_FOUND) }
+            return result;
+
+        } catch (error) {
+            if (error.message) { throw new HttpException(error.message, HttpStatus.BAD_REQUEST); }
+            else {
+                throw new HttpException('Server error', HttpStatus.INTERNAL_SERVER_ERROR)
+            }
+        }
+    }
+
+    
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
+    @Get('/getTeamRating/:teamId')
+    async getTeamRatings(@Param('teamId') teamId: string): Promise<ShowRating[]> {
+
+        try {
+
+            let result = await this.engineService.findTeamRatings(teamId);
+            if (result.length == 0) { throw new HttpException('No Ratings are found', HttpStatus.NOT_FOUND) }
+            return result;
+
+        } catch (error) {
+            if (error.message) { throw new HttpException(error.message, HttpStatus.BAD_REQUEST); }
+            else {
+                throw new HttpException('Server error', HttpStatus.INTERNAL_SERVER_ERROR)
+            }
+        }
+    }
+
+        
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
+    @Get('/getShareCountTeam/:teamId')
+    async getShareCountTeam(@Param('teamId') teamId: string): Promise<ShareCount> {
+
+        try {
+
+            let result = await this.engineService.findAllShareCountTeam(teamId);
+            if (result == null) { throw new HttpException('No sharing data is found', HttpStatus.NOT_FOUND) }
+            return result;
+
+        } catch (error) {
+            if (error.message) { throw new HttpException(error.message, HttpStatus.BAD_REQUEST); }
+            else {
+                throw new HttpException('Server error', HttpStatus.INTERNAL_SERVER_ERROR)
+            }
+        }
+    }
+
 
     @Post('/likeDislike')
     //@UseGuards(JwtAuthGuard, RolesGuard)

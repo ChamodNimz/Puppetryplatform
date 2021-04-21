@@ -50,6 +50,11 @@ export class EngineService {
         return await this.commentModel.find();
     }
 
+    async findAllCommentsTeam(teamId: string): Promise<Comment[]> {
+
+        return await this.commentModel.find({bookedTeam: teamId});
+    }
+
     async saveComment(commentDto: CommentDto) {
 
         const newComment = new this.commentModel(commentDto);
@@ -79,6 +84,11 @@ export class EngineService {
         return await this.showRatingModel.find();
     }
 
+    async findTeamRatings(teamId: string): Promise<ShowRating[]> {
+
+        return await this.showRatingModel.find({bookedTeam: teamId});
+    }
+
     async findAllLikeDislikes(): Promise<LikeDislike[]> {
 
         return await this.likeDislikeModel.find();
@@ -87,6 +97,10 @@ export class EngineService {
     async findAllShareCount(): Promise<ShareCount[]> {
 
         return await this.shareCountModel.find();
+    }
+    async findAllShareCountTeam(teamId: string): Promise<ShareCount> {
+
+        return await this.shareCountModel.findOne({bookedTeam: teamId});
     }
 
     async findBookingsFromTo(team: string ,fromDate: string, toDate: string): Promise<Booking[]> {
