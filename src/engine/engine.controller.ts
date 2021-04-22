@@ -152,8 +152,8 @@ export class EngineController {
         }
     }
 
-    @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
+    // @ApiBearerAuth()
+    // @UseGuards(JwtAuthGuard)
     @Get('/getComments/:teamId')
     async findAllCommmentsOfTeam(@Param('teamId') teamId: string): Promise<Comment[]> {
 
@@ -171,7 +171,7 @@ export class EngineController {
         }
     }
 
-    
+
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
     @Get('/getTeamRating/:teamId')
@@ -191,7 +191,7 @@ export class EngineController {
         }
     }
 
-        
+
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
     @Get('/getShareCountTeam/:teamId')
@@ -239,8 +239,8 @@ export class EngineController {
         }
     }
 
-    @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
+    // @ApiBearerAuth()
+    // @UseGuards(JwtAuthGuard)
     @Get('/getTeamRanking')
     async getTeamRanking(): Promise<TeamMetaData[]> {
 
@@ -251,20 +251,20 @@ export class EngineController {
             // get ratings
             let ratings = await this.engineService.findAllRatings();
             // get likes & dislikes
-            let likesDislikes = await  this.engineService.findAllLikeDislikes();
+            let likesDislikes = await this.engineService.findAllLikeDislikes();
             // get share count
             let shares = await this.engineService.findAllShareCount();
 
             // create team list to analyse
             ratings.forEach(el => {
-                teams.push({ teamId: el.bookedTeam, likes: 0, disLikes: 0, ratingCount: el.rating, shareCount: 0, weight: 0 });
+                teams.push({ teamId: el.bookedTeam, likes: 0, disLikes: 0, ratingCount: el.rating, shareCount: 0, weight: 0});
             });
 
-            teams.forEach( el => {
+            teams.forEach(el => {
                 el.shareCount = shares.find(e => e.bookedTeam == el.teamId).count;
             });
 
-            teams.forEach( el => {
+            teams.forEach(el => {
                 el.likes = likesDislikes.filter(e => e.bookedTeam == el.teamId && e.liked).length;
                 el.disLikes = likesDislikes.filter(e => e.bookedTeam == el.teamId && e.disliked).length;
             });
@@ -274,9 +274,10 @@ export class EngineController {
                 el.weight = el.likes + el.ratingCount + el.shareCount;
             });
 
-            console.log(this.teams);
+            // console.log(this.teams);
+         
             // rank
-            return teams.sort((a,b)=> b.weight - a.weight  );
+            return teams.sort((a, b) => b.weight - a.weight);
 
         } catch (error) {
             if (error.message) { throw new HttpException(error.message, HttpStatus.BAD_REQUEST); }
@@ -299,9 +300,9 @@ export class EngineController {
             let bookings = await this.engineService.findBookingsFromTo(teamId, fromDate, toDate);
             let total = 0;
             bookings.forEach(el => {
-                total = el.ticketPrice+total;
+                total = el.ticketPrice + total;
             });
-            return {team: team, total: total, ticketCount: bookings.length, showCount: team.shows.length}
+            return { team: team, total: total, ticketCount: bookings.length, showCount: team.shows.length }
 
         } catch (error) {
             if (error.message) { throw new HttpException(error.message, HttpStatus.BAD_REQUEST); }
