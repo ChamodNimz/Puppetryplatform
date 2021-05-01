@@ -18,6 +18,10 @@ export const BookingSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    publicUserId: {
+        type: String,
+        required: true,
+    },
     date: {
         type: Date,
         required: true,

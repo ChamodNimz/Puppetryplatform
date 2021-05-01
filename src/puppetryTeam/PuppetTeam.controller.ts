@@ -115,4 +115,21 @@ export class PuppetTeamController {
         }
     }
 
+    @Get('getTeams')
+    async findTeamAll(): Promise<PuppetTeam[]> {
+
+        try {
+
+            let result = await this.puppetTeamService.findAll();
+            if (!result) { throw new HttpException('no teams are found', HttpStatus.NOT_FOUND) }
+            return result;
+
+        } catch (error) {
+            if (error.message) { throw new HttpException(error.message, HttpStatus.BAD_REQUEST); }
+            else {
+                throw new HttpException('Server error', HttpStatus.INTERNAL_SERVER_ERROR)
+            }
+        }
+    }
+
 }
