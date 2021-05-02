@@ -257,7 +257,7 @@ export class EngineController {
 
             // create team list to analyse
             ratings.forEach(el => {
-                teams.push({ teamId: el.bookedTeam, likes: 0, disLikes: 0, ratingCount: el.rating, shareCount: 0, weight: 0});
+                teams.push({ teamId: el.bookedTeam, likes: 0, disLikes: 0, ratingCount: el.rating, shareCount: 0, weight: 0 });
             });
 
             teams.forEach(el => {
@@ -275,7 +275,7 @@ export class EngineController {
             });
 
             // console.log(this.teams);
-         
+
             // rank
             return teams.sort((a, b) => b.weight - a.weight);
 
@@ -294,15 +294,21 @@ export class EngineController {
 
         try {
 
+            let months = [];
             // team name, email, Started since
             let team = await this.puppetTeamService.findOne(teamId);
-            // Ticket price, No of tickets
-            let bookings = await this.engineService.findBookingsFromTo(teamId, fromDate, toDate);
-            let total = 0;
-            bookings.forEach(el => {
-                total = el.ticketPrice + total;
-            });
-            return { team: team, total: total, ticketCount: bookings.length, showCount: team.shows.length }
+
+            for (const el of ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12']) {
+
+                // Ticket price, No of tickets
+                let bookings = await this.engineService.findBookingsFromTo(teamId, '2021-' + el + '-01', '2021-' + el + '-28');
+                let total = 0;
+                bookings.forEach(e => {
+                    total = e.ticketPrice + total;
+                });
+                months.push({ team: team, total: total, ticketCount: bookings.length, showCount: team.shows.length, el: el });
+            }
+            return months;
 
         } catch (error) {
             if (error.message) { throw new HttpException(error.message, HttpStatus.BAD_REQUEST); }
