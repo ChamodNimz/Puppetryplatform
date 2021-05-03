@@ -14,6 +14,10 @@ export const ShowRatingShema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    publicUserId: {
+        type: String,
+        required: true,
+    },
     rating: {
         type: Number,
         required: true,

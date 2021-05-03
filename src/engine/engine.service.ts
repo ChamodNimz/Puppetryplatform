@@ -36,6 +36,11 @@ export class EngineService {
         return await newRating.save();
     }
 
+    async findRatings(rateShowDto: RateShowDto) {
+
+        return await this.showRatingModel.findOne({ bookedTeam: rateShowDto.bookedTeam, bookedShow: rateShowDto.bookedShow, publicUserId: rateShowDto.publicUserId });
+    }
+
     async findShareCount(countShareDto: CountShareDto): Promise<ShareCount> {
 
         return await this.shareCountModel.findOne({ bookedTeam: countShareDto.bookedTeam, bookedShow: countShareDto.bookedShow });

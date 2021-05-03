@@ -72,6 +72,12 @@ export class EngineController {
 
         try {
 
+
+            let ratings = await this.engineService.findRatings(rateShowDto);
+            if (ratings) {
+                ratings.rating = rateShowDto.rating
+                return await ratings.save();
+            }
             return await this.engineService.rateShow(rateShowDto);
 
         } catch (error) {
