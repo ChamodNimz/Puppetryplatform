@@ -110,4 +110,9 @@ export class EngineService {
             date: { $gte: new Date(fromDate), $lte: new Date(toDate) }
         });
     }
+
+    async findAllBookingsUser(id: string): Promise<Booking[]> {
+
+        return await this.bookingModel.find({publicUserId: id});
+    }
 }

@@ -7,7 +7,9 @@ import { CreatePublicUserDto } from './dto/create-publicUser.dto';
 @Injectable()
 export class PublicUserService {
 
-    constructor(@InjectModel('PublicUser') private readonly publicUserModel: Model<PublicUser>) { }
+    constructor(
+        @InjectModel('PublicUser') private readonly publicUserModel: Model<PublicUser>
+        ) { }
 
     async findAll(): Promise<PublicUser[]> {
 
