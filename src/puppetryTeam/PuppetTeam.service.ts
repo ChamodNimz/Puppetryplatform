@@ -17,6 +17,16 @@ export class PuppetTeamService {
         return await this.puppetTeamModel.find();
     }
 
+    async findAllNearMe(long:number, lat: number): Promise<PuppetTeam[]> {
+
+        // let locQuery = (distance) => {
+        //     return { location: { $near: { $geometry: { type: "Point", coordinates: [long,lat] }, $maxDistance: parseInt(distance)}}}
+        // }
+        return await this.puppetTeamModel.find().limit(3);
+        //{ location: { $near: { $geometry: { type: "Point", coordinates: [long,lat] }, $maxDistance: parseInt('5000')}}}
+        //return await this.puppetTeamModel.find({"shows": { location: { $near: { $geometry: { type: "Point", coordinates: [long,lat] }, $maxDistance: parseInt('5000')}}} });
+    }
+
     async findOne(id: string): Promise<PuppetTeam> {
 
         return await this.puppetTeamModel.findOne({ _id: id });

@@ -29,6 +29,18 @@ export const PuppetShowSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    location: {
+        type: {
+            type: String, // Don't do `{ location: { type: String } }`
+            //enum: ['Point'], // 'location.type' must be 'Point'
+            default:'Point',
+            required: true
+        },
+        coordinates: {
+            type: [Number],
+            required: true
+        }
+    },
     long: {
         type: String,
         required: true
@@ -46,3 +58,4 @@ export const PuppetShowSchema = new mongoose.Schema({
         required: false
     }
 });
+PuppetShowSchema.index({location:'2dsphere'});

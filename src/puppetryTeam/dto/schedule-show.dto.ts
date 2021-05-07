@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Document } from 'mongoose';
 
-export class ScheduleShowDto {
+export class ScheduleShowDto extends Document {
 
   @ApiProperty()
   readonly id?: string;
@@ -24,4 +25,9 @@ export class ScheduleShowDto {
   readonly lat: string;
   @ApiProperty()
   readonly seatCount: number;
+  @ApiProperty()
+  location: {
+    type: string;
+    coordinates: [number];
+  };
 }

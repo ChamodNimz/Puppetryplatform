@@ -52,7 +52,6 @@ export class PuppetTeamController {
     async createShow(@Body() scheduleShowDto: ScheduleShowDto) {
 
         try {
-
             return await this.puppetTeamService.scheduleShow(scheduleShowDto);
 
         } catch (error) {
@@ -104,6 +103,22 @@ export class PuppetTeamController {
 
         try {
             let result = await this.puppetTeamService.findAll();
+            if (!result) { throw new HttpException('no shows are found', HttpStatus.NOT_FOUND) }
+            return result;
+
+        } catch (error) {
+            if (error.message) { throw new HttpException(error.message, HttpStatus.BAD_REQUEST); }
+            else {
+                throw new HttpException('Server error', HttpStatus.INTERNAL_SERVER_ERROR)
+            }
+        }
+    }
+
+    @Get('getShowlistNearMe/:long/:lat')
+    async getShowlistNearMe(@Param('long') long: number, @Param('lat') lat: number): Promise<PuppetTeam[]> {
+
+        try {
+            let result = await this.puppetTeamService.findAllNearMe(long, lat);
             if (!result) { throw new HttpException('no shows are found', HttpStatus.NOT_FOUND) }
             return result;
 
