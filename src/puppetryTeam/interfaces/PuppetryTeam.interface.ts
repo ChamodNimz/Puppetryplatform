@@ -13,7 +13,7 @@ export interface PuppetTeam extends Document {
 
 }
 
-export interface PuppetShow extends Document {
+export interface PuppetShow {
 
   id?: string;
   showName: string;
@@ -22,10 +22,6 @@ export interface PuppetShow extends Document {
   venue: string;
   showDescription: string;
   ticketPrice: number;
-  location: {
-    type: string;
-    coordinates: [number];
-  };
   long: string;
   lat: string,
   seatCount: number,
